@@ -29,38 +29,40 @@ web upgrade
 var errRollback = errors.New("roll back error")
 
 func init() {
-	http.HandleFunc("/internal/index", func(w http.ResponseWriter, r *http.Request) {
-		if err := indexTmpl.Execute(w, nil); err != nil {
-			log.Print(err)
-		}
-	})
+	http.HandleFunc("/internal/index", Index)
+	http.HandleFunc("/internal/upgrade", Upgrade)
+}
+func Index(w http.ResponseWriter, r *http.Request) {
+	if err := indexTmpl.Execute(w, nil); err != nil {
+		log.Print(err)
+	}
+}
 
-	http.HandleFunc("/internal/upgrade", func(w http.ResponseWriter, r *http.Request) {
-		isSuc := true
-		defer func() {
-			if isSuc {
-				fmt.Fprintln(w, `{"code":0`)
-			} else {
-				fmt.Fprint(w, `{"code":1}`)
-			}
-		}()
+func Upgrade(w http.ResponseWriter, r *http.Request) {
+	isSuc := true
+	defer func() {
+		if isSuc {
+			fmt.Fprintln(w, `{"code":0`)
+		} else {
+			fmt.Fprint(w, `{"code":1}`)
+		}
+	}()
 
-		md5Str := r.URL.Query().Get("MD5")
-		if len(md5Str) == 0 {
-			isSuc = false
-			return
-		}
+	md5Str := r.URL.Query().Get("MD5")
+	if len(md5Str) == 0 {
+		isSuc = false
+		return
+	}
 
-		file, _, err := r.FormFile("firmware")
-		if err != nil {
-			isSuc = false
-			return
-		}
-		defer file.Close()
-		if err := doUpdate(file, md5Str); err != nil {
-			isSuc = false
-		}
-	})
+	file, _, err := r.FormFile("firmware")
+	if err != nil {
+		isSuc = false
+		return
+	}
+	defer file.Close()
+	if err := doUpdate(file, md5Str); err != nil {
+		isSuc = false
+	}
 }
 
 func doUpdate(file io.ReadSeeker, md string) error {
