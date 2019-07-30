@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/thinkgos/webupgrade"
+	_ "github.com/thinkgos/anytool"
 )
 
 func main() {

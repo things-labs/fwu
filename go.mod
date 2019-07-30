@@ -1,3 +1,3 @@
-module github.com/thinkgos/webupgrade
+module github.com/thinkgos/anytool
 
 go 1.12

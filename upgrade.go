@@ -1,4 +1,4 @@
-package webupgrade
+package anytool
 
 import (
 	"compress/bzip2"
@@ -29,8 +29,8 @@ web upgrade
 var errRollback = errors.New("roll back error")
 
 func init() {
-	http.HandleFunc("/internal/index", Index)
-	http.HandleFunc("/internal/upgrade", Upgrade)
+	http.HandleFunc("/internal/upgrade", Index)
+	http.HandleFunc("/internal/api/upgrade", Upgrade)
 }
 func Index(w http.ResponseWriter, r *http.Request) {
 	if err := indexTmpl.Execute(w, nil); err != nil {
