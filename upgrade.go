@@ -11,10 +11,27 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
+
+	"github.com/thinkgos/memlog"
 )
 
-var indexTmpl = template.Must(template.New("index").Parse(`<html>
+func init() {
+	memlog.SetLogger(memlog.AdapterMemory)
+
+	http.HandleFunc("/internal/tool", Toolhtml)
+	http.HandleFunc("/internal/logs", LogsHtml)
+
+	http.HandleFunc("/internal/api/reboot", Reboot)
+	http.HandleFunc("/internal/api/config", Config)
+	http.HandleFunc("/internal/api/upgrade", Upgrade)
+	http.HandleFunc("/internal/api/logs", Logs)
+}
+
+var errRollback = errors.New("roll back error")
+
+var toolTpl = template.Must(template.New("tool").Parse(`<html>
 <head>
 <title>web upgrade</title>
 <style>
@@ -26,43 +43,112 @@ web upgrade
 </html>
 `))
 
-var errRollback = errors.New("roll back error")
+// Tool get tool html page
+func Toolhtml(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		html404(w, r)
+		return
+	}
 
-func init() {
-	http.HandleFunc("/internal/upgrade", Index)
-	http.HandleFunc("/internal/api/upgrade", Upgrade)
-}
-func Index(w http.ResponseWriter, r *http.Request) {
-	if err := indexTmpl.Execute(w, nil); err != nil {
-		log.Print(err)
+	if err := toolTpl.Execute(w, nil); err != nil {
+		log.Printf("temple execute failed", err)
 	}
 }
 
-func Upgrade(w http.ResponseWriter, r *http.Request) {
-	isSuc := true
-	defer func() {
-		if isSuc {
-			fmt.Fprintln(w, `{"code":0`)
-		} else {
-			fmt.Fprint(w, `{"code":1}`)
-		}
-	}()
+func Reboot(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		html404(w, r)
+		return
+	}
+
+	_ = exec.Command("reboot").Run()
+}
+
+func Config(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		html404(w, r)
+		return
+	}
 
 	md5Str := r.URL.Query().Get("MD5")
 	if len(md5Str) == 0 {
-		isSuc = false
+		response(w, CodeSysInvalidArguments)
+		return
+	}
+
+	file, _, err := r.FormFile("config")
+	if err != nil {
+		response(w, CodeSysInvalidArguments)
+		return
+	}
+	defer file.Close()
+	err = saveConfigFile(file, md5Str)
+	if err != nil {
+		response(w, CodeSysOperationFailed)
+	} else {
+		response(w, CodeSuccess)
+	}
+}
+
+func saveConfigFile(file io.ReadSeeker, md string) error {
+	var err error
+
+	// 校验文件的正确性
+	h := md5.New()
+	if _, err = io.Copy(h, file); err != nil {
+		return err
+	}
+	mdStr := hex.EncodeToString(h.Sum(nil))
+	if md != mdStr {
+		return errors.New("invalid md5 check failed")
+	}
+
+	if _, err := file.Seek(0, io.SeekStart); err != nil {
+		return err
+	}
+	// 获取执行程序路径
+	execPath, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	// 配置文件路径
+	filePath := filepath.Join(filepath.Dir(execPath), "anytool.yaml")
+	fp, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
+	if err != nil {
+		return err
+	}
+
+	defer fp.Close()
+
+	_, err = io.Copy(fp, file)
+	return err
+}
+
+// Upgrade upgrade firmware
+func Upgrade(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		html404(w, r)
+		return
+	}
+
+	md5Str := r.URL.Query().Get("MD5")
+	if len(md5Str) == 0 {
+		response(w, CodeSysInvalidArguments)
 		return
 	}
 
 	file, _, err := r.FormFile("firmware")
 	if err != nil {
-		isSuc = false
+		response(w, CodeSysException)
 		return
 	}
 	defer file.Close()
 	if err := doUpdate(file, md5Str); err != nil {
-		isSuc = false
+		response(w, CodeSysOperationFailed)
+		return
 	}
+	response(w, CodeSuccess)
 }
 
 func doUpdate(file io.ReadSeeker, md string) error {
