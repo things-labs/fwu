@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>log</title>
+</head>
+<body>
+<div id="app">
+    <div class="row" >
+        <div >
+            <textarea name="" id="logList" cols="100" rows="30" readonly="readonly"   autocomplete="off"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" btn_group">
+            <button class="btn btn-info" onclick="refresh()">刷新</button>
+            <button class="btn btn-danger " onclick="dellog()">删除</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    function refresh(){
+        location.reload();
+    }
+    function dellog() {
+        var xmlHttp = new XMLHttpRequest();
+        //2.绑定监听函数
+        xmlHttp.onreadystatechange = function(){
+            //判断数据是否正常返回
+            if(xmlHttp.readyState==4&&xmlHttp.status==200){
+                //6.接收数据
+                location.reload();
+                // var res = xmlHttp.responseText;
+                // document.getElementById("span1").innerHTML = res;
+            }
+        }
+        //3.绑定处理请求的地址,true为异步，false为同步
+        //GET方式提交把参数加在地址后面?key1:value&key2:value
+        xmlHttp.open("POST","/internal/api/logs",true);
+        //4.POST提交设置的协议头（GET方式省略）
+        xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        //POST提交将参数，如果是GET提交send不用提交参数
+        //5.发送请求
+        xmlHttp.send();
+    }
+
+    var xmlHttp = new XMLHttpRequest();
+    //2.绑定监听函数
+    xmlHttp.onreadystatechange = function(){
+        //判断数据是否正常返回
+        if(xmlHttp.readyState==4&&xmlHttp.status==200){
+            //6.接收数据
+
+            var res = xmlHttp.responseText;
+            console.log(res);
+            document.getElementById("#logList").append(res.map(function (item) {
+                return item + '\t\n';
+            }));
+
+        }
+    }
+    //3.绑定处理请求的地址,true为异步，false为同步
+    //GET方式提交把参数加在地址后面?key1:value&key2:value
+    xmlHttp.open("get",'/internal/api/logs',true);
+    //4.POST提交设置的协议头（GET方式省略）
+    // xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    //POST提交将参数，如果是GET提交send不用提交参数
+    //5.发送请求"name=zjj&age=18"
+    xmlHttp.send();
+</script>
+
+</body>
+</html>
