@@ -54,12 +54,12 @@
         if(xmlHttp.readyState==4&&xmlHttp.status==200){
             //6.接收数据
 
-            var res = xmlHttp.responseText;
+            let res = xmlHttp.responseText;
             console.log(res);
-            document.getElementById("#logList").append(res.map(function (item) {
-                return item + '\t\n';
-            }));
-
+            let json = eval('('+res+')');
+            for (let i in json){
+                document.getElementById("logList").append(json.payload.list[i]+'\t\n');
+            }
         }
     }
     //3.绑定处理请求的地址,true为异步，false为同步
