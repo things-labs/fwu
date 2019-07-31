@@ -19,6 +19,7 @@ import (
 
 func init() {
 	memlog.SetLogger(memlog.AdapterMemory)
+	memlog.Info("anytool started")
 
 	http.HandleFunc("/internal/tool", Toolhtml)
 	http.HandleFunc("/internal/logs", LogsHtml)
