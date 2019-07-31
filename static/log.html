@@ -56,9 +56,10 @@
 
             let res = xmlHttp.responseText;
             console.log(res);
-            let json = eval('('+res+')');
-            for (let i in json){
-                document.getElementById("logList").append(json.payload.list[i]+'\t\n');
+            let js = eval('('+res+')');
+            console.log(js);
+            for (let i =0;i<js.payload.list.length;i++){
+                document.getElementById("logList").append(js.payload.list[i]+'\t\n');
             }
         }
     }
