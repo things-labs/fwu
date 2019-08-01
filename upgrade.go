@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -32,18 +31,6 @@ func init() {
 
 var errRollback = errors.New("roll back error")
 
-var toolTpl = template.Must(template.New("tool").Parse(`<html>
-<head>
-<title>web upgrade</title>
-<style>
-</style>
-</head>
-<body>
-web upgrade
-</body>
-</html>
-`))
-
 // Tool get tool html page
 func Toolhtml(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -52,7 +39,7 @@ func Toolhtml(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := toolTpl.Execute(w, nil); err != nil {
-		log.Printf("temple execute failed", err)
+		log.Println("temple execute failed", err)
 	}
 }
 
@@ -132,7 +119,6 @@ func Upgrade(w http.ResponseWriter, r *http.Request) {
 		html404(w, r)
 		return
 	}
-
 	md5Str := r.URL.Query().Get("MD5")
 	if len(md5Str) == 0 {
 		response(w, CodeSysInvalidArguments)
@@ -161,6 +147,7 @@ func doUpdate(file io.ReadSeeker, md string) error {
 		return err
 	}
 	mdStr := hex.EncodeToString(h.Sum(nil))
+	log.Printf("md5:%s\n%s\n", md, mdStr)
 	if md != mdStr {
 		return errors.New("invalid md5 check failed")
 	}

@@ -14,7 +14,7 @@ var Tpl404 = template.Must(template.New("logs").Parse(`<html><body>404 page not 
 
 func html404(w http.ResponseWriter, r *http.Request) {
 	if err := Tpl404.Execute(w, nil); err != nil {
-		log.Printf("Tpl404 template execute failed", err)
+		log.Println("Tpl404 template execute failed", err)
 	}
 }
 
@@ -71,7 +71,7 @@ func response(w http.ResponseWriter, code int, py ...interface{}) {
 	}
 	b, err := json.Marshal(rsp)
 	if err != nil {
-
+		panic(err)
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
