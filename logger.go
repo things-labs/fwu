@@ -3,22 +3,9 @@ package anytool
 import (
 	"log"
 	"net/http"
-	"text/template"
 
 	"github.com/thinkgos/memlog"
 )
-
-var logsTpl = template.Must(template.New("logs").Parse(`<html>
-<head>
-<title>logs</title>
-<style>
-</style>
-</head>
-<body>
-web upgrade
-</body>
-</html>
-`))
 
 func LogsHtml(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -26,7 +13,7 @@ func LogsHtml(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := logsTpl.Execute(w, nil); err != nil {
-		log.Printf("temple execute failed", err)
+		log.Println("temple execute failed", err)
 	}
 }
 
