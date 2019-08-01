@@ -79,6 +79,15 @@
 
 <div class="waittingPage hidden">
     <span class="promptInfo">正在上传更新固件中，请稍后....</span>
+    <div style="text-align: left;display: inline-block;width: 300px; height: 20px; border: 1px solid #44A1F8; border-radius: 2px;position: relative">
+        <div id="progress_bar" style="display: inline-block; width: 0px; height: 20px;background-color: #64B587"></div>
+        <div style="text-align: center;width: 300px;position: absolute; top: 0; font-size:16px; color: #413F43">
+            <div id="loading">
+                上传进度0%
+            </div>
+        </div>
+
+    </div>
 </div>
 <script type="text/javascript">
     (function (factory) {
@@ -836,8 +845,11 @@
     var calculated =false;
     function updatafile() {
         let upload = document.getElementById('uploadForm');
+
         let fi = document.getElementById('firmware');
-        let formData = new FormData(upload);
+        console.info('upload:',fi.files[0]);
+        let formData = new FormData();
+        formData.append('file',fi.files[0]);
         let file=fi.value;
         let filename=file.replace(/.*(\/|\\)/, "");
         let fileExt=(/[.]/.exec(filename)) ? /[^.]+$/.exec(filename.toLowerCase()) : '';
@@ -845,34 +857,52 @@
         let temp,urlname;
         if (calculated){
             calculated = false;
-            if (fileExt[0] == 'bz2') {
+            if (fileExt[0] == 'bz2'&&fi.files[0]) {
                 temp = document.getElementsByClassName('MD5').innerHTML;
-
                 console.log(temp);
                 urlname = '/internal/api/upgrade?MD5='+temp;
-
                 var xmlHttp = new XMLHttpRequest();
-                //3.绑定处理请求的地址,true为异步，false为同步
-                //GET方式提交把参数加在地址后面?key1:value&key2:value
+
+                xmlHttp.upload.onprogress = function (e) {
+                    var progress_bar = document.getElementById("progress_bar");
+                    var loading_dom = document.getElementById("loading");
+                    var loading = Math.round(e.loaded / e.total * 100);
+                    console.log("loading::", loading);
+
+                    if(loading === 100){
+                        loading_dom.innerHTML = "上传成功^_^";
+                    }else{
+                        loading_dom.innerHTML = "上传进度"+loading+"%"
+                    }
+
+                    progress_bar.style.width = String(loading * 3) + "px";
+                };
+                xmlHttp.onload = function(){
+                    document.getElementsByClassName('promptInfo').innerHTML ="正在重启网关，请稍后....";
+                    // setTimeout(function (){
+                    //     location.reload();
+                    // },30000);
+                };
+                xmlHttp.onerror = function(){
+                    alert('上传失败');
+                }
                 xmlHttp.open("post",urlname,true);
                 //2.绑定监听函数
                 xmlHttp.onreadystatechange = function(){
                     //判断数据是否正常返回
                     if(xmlHttp.readyState==4&&xmlHttp.status==200){
                         //6.接收数据
+                        res = xmlHttp.responseText;
+                        var data = eval('('+res+')');
+                        console.log(data);
+                        if (data.code == 0){
+                            console.log('get it');
+                        }
 
-                        document.getElementsByClassName('promptInfo').innerHTML ="正在重启网关，请稍后....";
-                        setTimeout(function (){
-                            location.reload();
-                        },30000);
 
                     }
                 }
-
-                //4.POST提交设置的协议头（GET方式省略）
                 xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                //POST提交将参数，如果是GET提交send不用提交参数
-                //5.发送请求"name=zjj&age=18"
                 xmlHttp.send(formData);
 
             }else{
