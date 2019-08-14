@@ -925,6 +925,8 @@
 
     // 上传成功
     function uploadComplete(e) {
+        let txt = document.getElementsByClassName('promptInfo');
+        txt.innerHTML = "上传完成！";
         console.log("上传成功！", e);
     }
 
