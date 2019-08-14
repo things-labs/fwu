@@ -152,7 +152,6 @@ func doUpdate(file io.ReadSeeker, md string) error {
 		return err
 	}
 	mdStr := hex.EncodeToString(h.Sum(nil))
-	log.Printf("md5:%s\n%s\n", md, mdStr)
 	if md != mdStr {
 		return errors.New("invalid md5 check failed")
 	}
