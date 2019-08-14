@@ -84,7 +84,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>syscfg</title>
+    <title>tool</title>
     <style type="text/css">
         .borderLine {
             border: 2px solid #666;
@@ -1007,6 +1007,8 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
     // 上传成功
     function uploadComplete(e) {
+        let txt = document.getElementsByClassName('promptInfo');
+        txt.innerHTML = "上传完成！";
         console.log("上传成功！", e);
     }
 
