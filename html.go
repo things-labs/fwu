@@ -163,21 +163,19 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
 <div class="waittingPage hidden">
     <span class="promptInfo">正在上传中，请稍后....</span>
-    <div class="progr">
+<!--    <div class="progr">-->
+<!--        <div class="progress"-->
+<!--             style="text-align: left;display: inline-block;width: 300px; height: 20px; border: 1px solid #44A1F8; border-radius: 2px;position: relative">-->
+<!--            <div id="progress_bar"-->
+<!--                 style="display: inline-block; width: 0px; height: 20px;background-color: #64B587"></div>-->
+<!--            <div style="text-align: center;width: 300px;position: absolute; top: 0; font-size:16px; color: #413F43">-->
+<!--                <div id="loading">-->
+<!--                    上传进度0%-->
+<!--                </div>-->
+<!--            </div>-->
 
-
-        <div class="progress"
-             style="text-align: left;display: inline-block;width: 300px; height: 20px; border: 1px solid #44A1F8; border-radius: 2px;position: relative">
-            <div id="progress_bar"
-                 style="display: inline-block; width: 0px; height: 20px;background-color: #64B587"></div>
-            <div style="text-align: center;width: 300px;position: absolute; top: 0; font-size:16px; color: #413F43">
-                <div id="loading">
-                    上传进度0%
-                </div>
-            </div>
-
-        </div>
-    </div>
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <script type="text/javascript">
     (function (factory) {
@@ -994,17 +992,17 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
     // 处理上传进度
     function progressFunction(e) {
-        var progress_bar = document.getElementById("progress_bar");
-        var loading_dom = document.getElementById("loading");
-        var loading = Math.round(e.loaded / e.total * 100);
-        console.log("loading::", loading);
-        if (loading === 100) {
-            loading_dom.innerHTML = "上传成功";
-        } else {
-            loading_dom.innerHTML = "上传进度" + loading + "%"
-        }
-
-        progress_bar.style.width = String(loading * 3) + "px";
+        // let progress_bar = document.getElementById("progress_bar");
+        // let loading_dom = document.getElementById("loading");
+        // let loading = Math.round(e.loaded / e.total * 100);
+        // console.log("loading::", loading);
+        // if (loading === 100) {
+        //     loading_dom.innerHTML = "上传成功";
+        // } else {
+        //     loading_dom.innerHTML = "上传进度" + loading + "%"
+        // }
+        //
+        // progress_bar.style.width = String(loading * 3) + "px";
     }
 
     // 上传成功
