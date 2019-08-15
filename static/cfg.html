@@ -925,9 +925,9 @@
 
     // 上传成功
     function uploadComplete(e) {
-        let txt = document.getElementsByClassName('promptInfo');
-        txt.innerHTML = "上传完成！";
+        alert('上传成功！');
         console.log("上传成功！", e);
+        location.reload();
     }
 
     // 上传失败
@@ -980,7 +980,6 @@
     }
 
     function calculate() {
-
         console.info('calculate()', calculated);
         var fileReader = new FileReader(),
             box = document.getElementById('box');

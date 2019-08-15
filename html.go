@@ -1010,9 +1010,9 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
     // 上传成功
     function uploadComplete(e) {
-        let txt = document.getElementsByClassName('promptInfo');
-        txt.innerHTML = "上传完成！";
+        alert('上传成功！');
         console.log("上传成功！", e);
+		location.reload();
     }
 
     // 上传失败
