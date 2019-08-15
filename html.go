@@ -24,8 +24,7 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
 </div>
 
 <script type="text/javascript">
-
-
+		
     function refresh(){
         location.reload();
     }
@@ -65,6 +64,8 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
             for (let i =0;i<js.payload.list.length;i++){
                 document.getElementById("logList").append(js.payload.list[i]+'\t\n');
             }
+			var textarea = document.getElementById('logList');
+			textarea.scrollTop = textarea.scrollHeight;
         }
     }
     //3.绑定处理请求的地址,true为异步，false为同步
@@ -75,10 +76,12 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
     //POST提交将参数，如果是GET提交send不用提交参数
     //5.发送请求"name=zjj&age=18"
     xmlHttp.send();
+	
 </script>
 
 </body>
-</html>`))
+</html>
+`))
 
 var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 <html lang="en">

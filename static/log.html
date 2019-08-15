@@ -21,8 +21,6 @@
 
 <script type="text/javascript">
 
-    let textarea = document.getElementById('logList');
-    textarea.scrollTop = textarea.scrollHeight;
     function refresh(){
         location.reload();
     }
@@ -62,6 +60,8 @@
             for (let i =0;i<js.payload.list.length;i++){
                 document.getElementById("logList").append(js.payload.list[i]+'\t\n');
             }
+            var textarea = document.getElementById('logList');
+            textarea.scrollTop = textarea.scrollHeight;
         }
     }
     //3.绑定处理请求的地址,true为异步，false为同步
