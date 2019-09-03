@@ -48,6 +48,7 @@ help:
 	@echo " make         -- same as 'make system'"
 	@echo " make system  -- build target for system"
 	@echo " make arm5    -- build target for arm5"
+	@echo " make mipsle  -- build target for mipsle"
 	@echo " make clean   -- clean build files"
 	@echo " make install -- install executable files"
 	@echo " ------------- How to build ------------- "
