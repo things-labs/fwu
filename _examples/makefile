@@ -8,8 +8,7 @@ ifeq (${MAKECMDGOALS},arm5)
 	firmware := ${firmwareName}-linux-arm5-${version}
 else ifeq (${MAKECMDGOALS},mipsle)
 	firmware := ${firmwareName}-linux-mipsle-${version}
-else
-	# default system
+else # default system
 	firmware := ${firmwareName}-system-${version}
 endif
 

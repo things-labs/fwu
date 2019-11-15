@@ -25,8 +25,8 @@ func init() {
 	memlog.SetLogger(memlog.AdapterMemory)
 	memlog.Info("anytool started")
 
-	http.HandleFunc("/internal/tool", Toolhtml)
-	http.HandleFunc("/internal/logs", LogsHtml)
+	http.HandleFunc("/internal/tool", ToolHTML)
+	http.HandleFunc("/internal/logs", LogsHTML)
 
 	http.HandleFunc("/internal/api/reboot", Reboot)
 	http.HandleFunc("/internal/api/config", Config)
@@ -37,7 +37,7 @@ func init() {
 var errRollback = errors.New("roll back error")
 
 // Tool get tool html page
-func Toolhtml(w http.ResponseWriter, r *http.Request) {
+func ToolHTML(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		html404(w, r)
 		return

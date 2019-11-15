@@ -7,7 +7,7 @@ import (
 	"github.com/thinkgos/memlog"
 )
 
-func LogsHtml(w http.ResponseWriter, r *http.Request) {
+func LogsHTML(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		html404(w, r)
 		return
