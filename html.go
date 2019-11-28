@@ -1036,7 +1036,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
                 urlname = '/internal/api/upgrade?MD5=' + temp;
                 fi.setAttribute('name', 'firmware');
                 form.append("firmware", file_obj);
-            } else if (fileExt[0] == 'yaml') {
+            } else if (fileExt[0] == 'yaml' || fileExt[0] == 'yml') {
                 urlname = '/internal/api/config?MD5=' + temp;
                 fi.setAttribute('name', 'config');
                 form.append("config", file_obj);
@@ -1053,8 +1053,6 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
                 // xhr.setRequestHeader("Content-type","multipart/form-data");
                 xhr.send(form);
             }
-
-
         }
     }
 
@@ -1097,6 +1095,20 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
     }
 
     function updata() {
+        let file = document.getElementById("firmware").files[0]
+        if (file == undefined){
+            alert('请选择文件,支持bz2,yaml,yml');
+            return
+        }
+        let fi = document.getElementById('firmware');
+        file = fi.value;
+        let filename = file.replace(/.*(\/|\\)/, "");
+        let fileExt = (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename.toLowerCase()) : '';
+        if (!(fileExt[0] == 'bz2'|| fileExt[0] == 'yaml' || fileExt[0] == 'yml')) {
+            alert('文件支持bz2,yaml,yml');
+            return ;
+        }
+
         let txt = document.getElementsByClassName('promptInfo');
         let page = document.getElementsByClassName('waittingPage')[0];
         let mainpage = document.getElementsByClassName('main')[0];
