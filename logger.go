@@ -23,10 +23,10 @@ type LogsInfo struct {
 
 func Logs(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		response(w, CodeSuccess, &LogsInfo{memlog.ReadLastMsgs()})
+		responseOK(w, &LogsInfo{memlog.ReadLastMsgs()})
 	} else if r.Method == http.MethodPost {
 		memlog.Clear()
-		response(w, CodeSuccess)
+		response(w, http.StatusOK)
 	} else {
 		html404(w, r)
 	}

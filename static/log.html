@@ -14,7 +14,7 @@
     <div class="row">
         <div class=" btn_group">
             <button class="btn btn-info" onclick="refresh()">刷新</button>
-            <button class="btn btn-danger " onclick="dellog()">删除</button>
+            <button class="btn btn-danger " onclick="dellog()">清除</button>
         </div>
     </div>
 </div>
@@ -52,13 +52,12 @@
         //判断数据是否正常返回
         if(xmlHttp.readyState==4&&xmlHttp.status==200){
             //6.接收数据
-
             let res = xmlHttp.responseText;
             console.log(res);
             let js = eval('('+res+')');
             console.log(js);
-            for (let i =0;i<js.payload.list.length;i++){
-                document.getElementById("logList").append(js.payload.list[i]+'\t\n');
+            for (let i =0;i<js.list.length;i++){
+                document.getElementById("logList").append(js.list[i]+'\t\n');
             }
             var textarea = document.getElementById('logList');
             textarea.scrollTop = textarea.scrollHeight;
@@ -73,6 +72,5 @@
     //5.发送请求"name=zjj&age=18"
     xmlHttp.send();
 </script>
-
 </body>
 </html>

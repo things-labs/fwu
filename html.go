@@ -18,13 +18,13 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
     <div class="row">
         <div class=" btn_group">
             <button class="btn btn-info" onclick="refresh()">刷新</button>
-            <button class="btn btn-danger " onclick="dellog()">删除</button>
+            <button class="btn btn-danger " onclick="dellog()">清除</button>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-		
+
     function refresh(){
         location.reload();
     }
@@ -56,16 +56,15 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
         //判断数据是否正常返回
         if(xmlHttp.readyState==4&&xmlHttp.status==200){
             //6.接收数据
-
             let res = xmlHttp.responseText;
             console.log(res);
             let js = eval('('+res+')');
             console.log(js);
-            for (let i =0;i<js.payload.list.length;i++){
-                document.getElementById("logList").append(js.payload.list[i]+'\t\n');
+            for (let i =0;i<js.list.length;i++){
+                document.getElementById("logList").append(js.list[i]+'\t\n');
             }
-			var textarea = document.getElementById('logList');
-			textarea.scrollTop = textarea.scrollHeight;
+            var textarea = document.getElementById('logList');
+            textarea.scrollTop = textarea.scrollHeight;
         }
     }
     //3.绑定处理请求的地址,true为异步，false为同步
@@ -76,9 +75,7 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
     //POST提交将参数，如果是GET提交send不用提交参数
     //5.发送请求"name=zjj&age=18"
     xmlHttp.send();
-	
 </script>
-
 </body>
 </html>
 `))
@@ -951,7 +948,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
         if (fileExt[0] == 'yaml') {
             urlname = '/internal/api/upgrade?MD5=' + temp;
 
-            var file_obj = document.getElementById("cfgFile").files[0]
+            var file_obj = document.getElementById("cfgFile").files[0];
             if (file_obj) {
                 var form = new FormData();
                 form.append("firmware", file_obj);
@@ -984,13 +981,10 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
             } else {
                 alert("请先选择文件后再上传")
             }
-
-
         } else {
             alert('文件格式错误');
             location.reload();
         }
-
     }
 
     // 处理上传进度
@@ -1012,7 +1006,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
     function uploadComplete(e) {
         alert('上传成功！');
         console.log("上传成功！", e);
-		location.reload();
+        location.reload();
     }
 
     // 上传失败
@@ -1065,7 +1059,6 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
     }
 
     function calculate() {
-
         console.info('calculate()', calculated);
         var fileReader = new FileReader(),
             box = document.getElementById('box');
@@ -1100,10 +1093,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
             fileReader.readAsBinaryString(blobSlice.call(file, start, end));
         };
-
         loadNext();
-
-
     }
 
     function updata() {
@@ -1114,7 +1104,6 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
         mainpage.classList.add('hidden');
         txt.innerHTML = "正在上传中，请稍后....";
         calculate();
-
     }
 
     function restart() {
@@ -1124,16 +1113,9 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
         xmlHttp.onreadystatechange = function () {
             //判断数据是否正常返回
             if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                //6.接收数据
-
-                let res = xmlHttp.responseText;
-                let data = eval('('+res+')');
-                if (data.code == 0){
-                    alert('上传成功，请等待60s后，刷新页面');
-                }else{
-                    alert('重启失败')
-                }
-
+                alert('上传成功，请等待60s后，刷新页面');
+            }else{
+                alert('重启失败')
             }
         }
         //3.绑定处理请求的地址,true为异步，false为同步

@@ -64,8 +64,8 @@ func Config(w http.ResponseWriter, r *http.Request) {
 	}
 
 	md5Str := r.URL.Query().Get("MD5")
-	if len(md5Str) == 0 {
-		response(w, CodeSysInvalidArguments)
+	if md5Str == "" {
+		response(w, http.StatusBadRequest)
 		return
 	}
 
@@ -79,7 +79,7 @@ func Config(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response(w, CodeSysOperationFailed)
 	} else {
-		response(w, CodeSuccess)
+		response(w, http.StatusOK)
 	}
 }
 
@@ -132,7 +132,7 @@ func Upgrade(w http.ResponseWriter, r *http.Request) {
 
 	file, _, err := r.FormFile("firmware")
 	if err != nil {
-		response(w, CodeSysException)
+		response(w, http.StatusInternalServerError)
 		return
 	}
 	defer file.Close()
@@ -140,7 +140,7 @@ func Upgrade(w http.ResponseWriter, r *http.Request) {
 		response(w, CodeSysOperationFailed)
 		return
 	}
-	response(w, CodeSuccess)
+	response(w, http.StatusOK)
 }
 
 func doUpdate(file io.ReadSeeker, md string) error {
