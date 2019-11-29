@@ -7,6 +7,7 @@ import (
 	"github.com/thinkgos/memlog"
 )
 
+// LogsHTML 日志html页面
 func LogsHTML(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		html404(w, r)
@@ -17,13 +18,15 @@ func LogsHTML(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type LogsInfo struct {
+// LogsInfos 日志信息
+type LogsInfos struct {
 	List []string `json:"list"`
 }
 
+// Logs 日志处理handler
 func Logs(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		responseOK(w, &LogsInfo{memlog.ReadLastMsgs()})
+		responseOK(w, &LogsInfos{memlog.ReadLastMsgs()})
 	} else if r.Method == http.MethodPost {
 		memlog.Clear()
 		response(w, http.StatusOK)

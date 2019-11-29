@@ -36,7 +36,7 @@ func init() {
 
 var errRollback = errors.New("roll back error")
 
-// Tool get tool html page
+// ToolHTML get tool html page
 func ToolHTML(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		html404(w, r)
@@ -48,6 +48,7 @@ func ToolHTML(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Reboot 重启命令
 func Reboot(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		html404(w, r)
@@ -57,6 +58,7 @@ func Reboot(w http.ResponseWriter, r *http.Request) {
 	_ = exec.Command("reboot").Run()
 }
 
+// Config 配置命令
 func Config(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		html404(w, r)

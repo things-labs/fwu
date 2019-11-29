@@ -7,6 +7,7 @@ import (
 	"text/template"
 )
 
+// Tpl404 404页面模板
 var Tpl404 = template.Must(template.New("logs").Parse(`<html><body>404 page not found</body></html>`))
 
 func html404(w http.ResponseWriter, r *http.Request) {
