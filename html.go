@@ -10,41 +10,41 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
-    <div class="row" >
-        <div >
-            <textarea name="" id="logList" cols="100" rows="30" readonly="readonly"   autocomplete="off"></textarea>
+    <div class="row">
+        <div>
+            <textarea name="" id="logList" cols="100" rows="30" readonly="readonly" autocomplete="off"></textarea>
         </div>
     </div>
     <div class="row">
         <div class=" btn_group">
-            <button class="btn btn-info" onclick="refresh()">刷新</button>
-            <button class="btn btn-danger " onclick="dellog()">清除</button>
+            <button class="btn btn-info" onclick="refreshLog()">刷新</button>
+            <button class="btn btn-danger " onclick="clearLog()">清除</button>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-
-    function refresh(){
+    function refreshLog() {
         location.reload();
     }
-    function dellog() {
+
+    function clearLog() {
         var xmlHttp = new XMLHttpRequest();
         //2.绑定监听函数
-        xmlHttp.onreadystatechange = function(){
+        xmlHttp.onreadystatechange = function () {
             //判断数据是否正常返回
-            if(xmlHttp.readyState==4&&xmlHttp.status==200){
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                 //6.接收数据
                 location.reload();
                 // var res = xmlHttp.responseText;
                 // document.getElementById("span1").innerHTML = res;
             }
-        }
+        };
         //3.绑定处理请求的地址,true为异步，false为同步
         //GET方式提交把参数加在地址后面?key1:value&key2:value
-        xmlHttp.open("POST","/internal/api/logs",true);
+        xmlHttp.open("POST", "/internal/api/logs", true);
         //4.POST提交设置的协议头（GET方式省略）
-        xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         //POST提交将参数，如果是GET提交send不用提交参数
         //5.发送请求
         xmlHttp.send();
@@ -52,24 +52,24 @@ var logsTpl = template.Must(template.New("logs").Parse(`<!DOCTYPE html>
 
     var xmlHttp = new XMLHttpRequest();
     //2.绑定监听函数
-    xmlHttp.onreadystatechange = function(){
+    xmlHttp.onreadystatechange = function () {
         //判断数据是否正常返回
-        if(xmlHttp.readyState==4&&xmlHttp.status==200){
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             //6.接收数据
             let res = xmlHttp.responseText;
             console.log(res);
-            let js = eval('('+res+')');
+            let js = eval('(' + res + ')');
             console.log(js);
-            for (let i =0;i<js.list.length;i++){
-                document.getElementById("logList").append(js.list[i]+'\t\n');
+            for (let i = 0; i < js.list.length; i++) {
+                document.getElementById("logList").append(js.list[i] + '\t\n');
             }
             var textarea = document.getElementById('logList');
             textarea.scrollTop = textarea.scrollHeight;
         }
-    }
+    };
     //3.绑定处理请求的地址,true为异步，false为同步
     //GET方式提交把参数加在地址后面?key1:value&key2:value
-    xmlHttp.open("get",'/internal/api/logs',true);
+    xmlHttp.open("get", '/internal/api/logs', true);
     //4.POST提交设置的协议头（GET方式省略）
     // xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     //POST提交将参数，如果是GET提交send不用提交参数
@@ -163,19 +163,6 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
 <div class="waittingPage hidden">
     <span class="promptInfo">正在上传中，请稍后....</span>
-<!--    <div class="progr">-->
-<!--        <div class="progress"-->
-<!--             style="text-align: left;display: inline-block;width: 300px; height: 20px; border: 1px solid #44A1F8; border-radius: 2px;position: relative">-->
-<!--            <div id="progress_bar"-->
-<!--                 style="display: inline-block; width: 0px; height: 20px;background-color: #64B587"></div>-->
-<!--            <div style="text-align: center;width: 300px;position: absolute; top: 0; font-size:16px; color: #413F43">-->
-<!--                <div id="loading">-->
-<!--                    上传进度0%-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--        </div>-->
-<!--    </div>-->
 </div>
 <script type="text/javascript">
     (function (factory) {
@@ -1096,7 +1083,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
     function updata() {
         let file = document.getElementById("firmware").files[0]
-        if (file == undefined){
+        if (file == undefined) {
             alert('请选择文件,支持bz2,yaml,yml');
             return
         }
@@ -1104,9 +1091,9 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
         file = fi.value;
         let filename = file.replace(/.*(\/|\\)/, "");
         let fileExt = (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename.toLowerCase()) : '';
-        if (!(fileExt[0] == 'bz2'|| fileExt[0] == 'yaml' || fileExt[0] == 'yml')) {
+        if (!(fileExt[0] == 'bz2' || fileExt[0] == 'yaml' || fileExt[0] == 'yml')) {
             alert('文件支持bz2,yaml,yml');
-            return ;
+            return;
         }
 
         let txt = document.getElementsByClassName('promptInfo');
@@ -1126,10 +1113,10 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
             //判断数据是否正常返回
             if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                 alert('上传成功，请等待60s后，刷新页面');
-            }else{
+            } else {
                 alert('重启失败')
             }
-        }
+        };
         //3.绑定处理请求的地址,true为异步，false为同步
         //GET方式提交把参数加在地址后面?key1:value&key2:value
         xmlHttp.open("post", '/internal/api/reboot', true);
