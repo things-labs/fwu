@@ -991,7 +991,7 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
 
     // 上传成功
     function uploadComplete(e) {
-        alert('上传成功！');
+        alert('上传成功！请重启');
         console.log("上传成功！", e);
         location.reload();
     }
