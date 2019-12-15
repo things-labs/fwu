@@ -4,11 +4,20 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/thinkgos/anytool"
+	"github.com/thinkgos/anytool"
 )
 
 func main() {
-	if err := http.ListenAndServe(":9090", nil); err != nil {
+	//html
+	http.HandleFunc("/internal/tool", anytool.ToolHTML)
+	http.HandleFunc("/internal/logs", anytool.LogsHTML)
+	// api
+	http.HandleFunc(anytool.URLAPIReboot, anytool.Reboot)
+	http.HandleFunc(anytool.URLAPIConfig, anytool.Config)
+	http.HandleFunc(anytool.URLAPIUpgrade, anytool.Upgrade)
+	http.HandleFunc(anytool.URLAPILogs, anytool.Logs)
+
+	if err := http.ListenAndServe(":9527", nil); err != nil {
 		log.Printf("http listen and serve failed, %v", err)
 	}
 }

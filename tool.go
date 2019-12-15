@@ -22,17 +22,17 @@ import (
 )
 
 func init() {
-	memlog.SetLogger(memlog.AdapterMemory)
+	_ = memlog.SetLogger(memlog.AdapterMemory)
 	memlog.Info("anytool started")
-
-	http.HandleFunc("/internal/tool", ToolHTML)
-	http.HandleFunc("/internal/logs", LogsHTML)
-
-	http.HandleFunc("/internal/api/reboot", Reboot)
-	http.HandleFunc("/internal/api/config", Config)
-	http.HandleFunc("/internal/api/upgrade", Upgrade)
-	http.HandleFunc("/internal/api/logs", Logs)
 }
+
+// API URL
+const (
+	URLAPIReboot  = "/internal/api/reboot"
+	URLAPIConfig  = "/internal/api/config"
+	URLAPIUpgrade = "/internal/api/upgrade"
+	URLAPILogs    = "/internal/api/logs"
+)
 
 var errRollback = errors.New("roll back error")
 
