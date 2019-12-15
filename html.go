@@ -1111,10 +1111,12 @@ var toolTpl = template.Must(template.New("tool").Parse(`<!DOCTYPE html>
         //2.绑定监听函数
         xmlHttp.onreadystatechange = function () {
             //判断数据是否正常返回
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                alert('上传成功，请等待60s后，刷新页面');
-            } else {
-                alert('重启失败')
+            if (xmlHttp.readyState == 4 ) {
+                if (xmlHttp.status == 200){
+                    alert('重启成功，请等待60s后，刷新页面');
+                }else {
+                    alert('重启失败')
+                }
             }
         };
         //3.绑定处理请求的地址,true为异步，false为同步
