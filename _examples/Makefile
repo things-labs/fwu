@@ -19,6 +19,7 @@ system:
 	@echo "----> system executable building..."
 	@mkdir -p ${BINDIR}
 	@CGO_ENABLED=1 go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
+	@upx -9 ${BINDIR}/${firmware}
 	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
 	@echo "----> system executable build successful"
 
@@ -26,6 +27,7 @@ arm5:
 	@echo "----> linux arm5 executable building..."
 	@mkdir -p ${BINDIR}
 	@CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
+	@upx -9 ${BINDIR}/${firmware}
 	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
 	@echo "----> linux arm5 executable build successful"
 
@@ -36,6 +38,7 @@ mipsle:
 	STAGING_DIR=/opt/toolchain/openwrt18.06/staging_dir \
 	CC=/opt/toolchain/openwrt18.06/staging_dir/gcc-mipsel-linux-7.3.0/bin/mipsel-openwrt-linux-gcc \
 	go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
+	@upx -9 ${BINDIR}/${firmware}
 	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
 	@echo "----> linux mipsle executable build successful"
 
