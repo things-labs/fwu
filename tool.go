@@ -58,14 +58,14 @@ func Reboot(w http.ResponseWriter, r *http.Request) {
 	_ = exec.Command("reboot").Run()
 }
 
-// Config 配置命令
-func Config(w http.ResponseWriter, r *http.Request) {
+// UploadConfigFile 配置命令
+func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		html404(w, r)
 		return
 	}
 
-	md5Str := r.URL.Query().Get("MD5")
+	md5Str := r.FormValue("MD5")
 	if md5Str == "" {
 		response(w, http.StatusBadRequest)
 		return
@@ -77,7 +77,7 @@ func Config(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-	err = saveConfigFile(file, md5Str)
+	err = doConfigFile(file, md5Str)
 	if err != nil {
 		response(w, CodeSysOperationFailed)
 	} else {
@@ -85,7 +85,7 @@ func Config(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func saveConfigFile(file io.ReadSeeker, md string) error {
+func doConfigFile(file io.ReadSeeker, md string) error {
 	var err error
 
 	// 校验文件的正确性
@@ -126,8 +126,8 @@ func Upgrade(w http.ResponseWriter, r *http.Request) {
 		html404(w, r)
 		return
 	}
-	md5Str := r.URL.Query().Get("MD5")
-	if len(md5Str) == 0 {
+	md5Str := r.FormValue("MD5")
+	if md5Str == "" {
 		response(w, CodeSysInvalidArguments)
 		return
 	}

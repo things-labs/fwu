@@ -13,7 +13,7 @@ func main() {
 	http.HandleFunc("/internal/logs", anytool.LogsHTML)
 	// api
 	http.HandleFunc(anytool.URLAPIReboot, anytool.Reboot)
-	http.HandleFunc(anytool.URLAPIConfig, anytool.Config)
+	http.HandleFunc(anytool.URLAPIConfig, anytool.UploadConfigFile)
 	http.HandleFunc(anytool.URLAPIUpgrade, anytool.Upgrade)
 	http.HandleFunc(anytool.URLAPILogs, anytool.Logs)
 
