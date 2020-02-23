@@ -2,19 +2,8 @@ package anytool
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
-	"text/template"
 )
-
-// Tpl404 404页面模板
-var Tpl404 = template.Must(template.New("logs").Parse(`<html><body>404 page not found</body></html>`))
-
-func html404(w http.ResponseWriter, r *http.Request) {
-	if err := Tpl404.Execute(w, nil); err != nil {
-		log.Println("Tpl404 template execute failed", err)
-	}
-}
 
 // code 错误码
 const (

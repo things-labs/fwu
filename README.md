@@ -1,6 +1,5 @@
 # tool
 - http端口： 建议9527
-- 日志地址： internal/logs
 - 工具： internal/tool 
 > a. 重启  
 > b. 上传配置,只支持yaml,yml文件,固定名字anytool.yaml  

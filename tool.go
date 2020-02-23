@@ -17,54 +17,31 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	"github.com/thinkgos/memlog"
 )
-
-func init() {
-	_ = memlog.SetLogger(memlog.AdapterMemory)
-	memlog.Info("anytool started")
-}
 
 // API URL
 const (
 	URLAPIReboot  = "/internal/api/reboot"
 	URLAPIConfig  = "/internal/api/config"
 	URLAPIUpgrade = "/internal/api/upgrade"
-	URLAPILogs    = "/internal/api/logs"
 )
 
 var errRollback = errors.New("roll back error")
 
 // ToolHTML get tool html page
-func ToolHTML(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		html404(w, r)
-		return
-	}
-
+func ToolHTML(w http.ResponseWriter, _ *http.Request) {
 	if err := toolTpl.Execute(w, nil); err != nil {
 		log.Println("temple execute failed", err)
 	}
 }
 
 // Reboot 重启命令
-func Reboot(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		html404(w, r)
-		return
-	}
-
+func Reboot(_ http.ResponseWriter, _ *http.Request) {
 	_ = exec.Command("reboot").Run()
 }
 
-// UploadConfigFile 配置命令
+// UploadConfigFile 配置命令 method post
 func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		html404(w, r)
-		return
-	}
-
 	md5Str := r.FormValue("MD5")
 	if md5Str == "" {
 		response(w, http.StatusBadRequest)
@@ -120,12 +97,8 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 	return err
 }
 
-// Upgrade upgrade firmware
+// Upgrade upgrade firmware ( method post )
 func Upgrade(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		html404(w, r)
-		return
-	}
 	md5Str := r.FormValue("MD5")
 	if md5Str == "" {
 		response(w, CodeSysInvalidArguments)

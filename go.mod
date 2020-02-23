@@ -1,5 +1,3 @@
 module github.com/thinkgos/anytool
 
-go 1.12
-
-require github.com/thinkgos/memlog v0.2.1
+go 1.13
