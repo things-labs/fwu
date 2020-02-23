@@ -844,10 +844,10 @@ function doUpload(file, md5) {
     var form = new FormData()
     form.append('MD5', md5)
     if (fileExt[0] === 'bz2') {
-        urlname = '/internal/api/upgrade'
+        urlname = '/api/anytool/upgrade'
         form.append('firmware', file)
     } else if (fileExt[0] === 'yaml' || fileExt[0] === 'yml') {
-        urlname = '/internal/api/config'
+        urlname = '/api/anytool/config'
         form.append('config', file)
     } else {
         alert('文件有误')
@@ -943,7 +943,7 @@ function restart() {
     }
     //3.绑定处理请求的地址,true为异步，false为同步
     //GET方式提交把参数加在地址后面?key1:value&key2:value
-    xmlHttp.open('post', '/internal/api/reboot', true)
+    xmlHttp.open('post', '/api/anytool/reboot', true)
     //4.POST提交设置的协议头（GET方式省略）
     xmlHttp.setRequestHeader('Content-type', 'multipart/form-data')
     //POST提交将参数，如果是GET提交send不用提交参数

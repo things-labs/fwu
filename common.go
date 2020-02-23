@@ -60,7 +60,7 @@ func responseOK(w http.ResponseWriter, data interface{}) {
 	JSON(w, http.StatusOK, data)
 }
 
-// JSON json转输
+// JSON json传输
 func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	content, err := json.Marshal(data)
 	if err != nil {

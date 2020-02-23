@@ -1,6 +1,6 @@
 
 # 固件版本
-version = v0.1.1
+version = v0.1.2
 # 设置固件名称
 firmwareName = anytool
 

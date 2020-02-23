@@ -21,9 +21,9 @@ import (
 
 // API URL
 const (
-	URLAPIReboot  = "/internal/api/reboot"
-	URLAPIConfig  = "/internal/api/config"
-	URLAPIUpgrade = "/internal/api/upgrade"
+	URLAPIReboot  = "/api/anytool/reboot"
+	URLAPIConfig  = "/api/anytool/config"
+	URLAPIUpgrade = "/api/anytool/upgrade"
 )
 
 var errRollback = errors.New("roll back error")
