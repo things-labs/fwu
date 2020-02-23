@@ -42,7 +42,7 @@ func Reboot(_ http.ResponseWriter, _ *http.Request) {
 
 // UploadConfigFile 配置命令 method post
 func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
-	md5Str := r.FormValue("MD5")
+	md5Str := r.FormValue("md5")
 	if md5Str == "" {
 		response(w, http.StatusBadRequest)
 		return
@@ -99,7 +99,7 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 
 // Upgrade upgrade firmware ( method post )
 func Upgrade(w http.ResponseWriter, r *http.Request) {
-	md5Str := r.FormValue("MD5")
+	md5Str := r.FormValue("md5")
 	if md5Str == "" {
 		response(w, CodeSysInvalidArguments)
 		return
