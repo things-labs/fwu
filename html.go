@@ -846,7 +846,7 @@ function doUpload(file, md5) {
     let urlname
 
     var form = new FormData()
-    form.append('MD5', md5)
+    form.append('md5', md5)
     if (fileExt[0] === 'bz2') {
         urlname = '/api/anytool/upgrade'
         form.append('firmware', file)
