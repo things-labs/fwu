@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//html
-	http.HandleFunc("/tools", anytool.ToolHTML)
+	http.HandleFunc("/", anytool.ToolHTML)
 	// api
 	http.HandleFunc(anytool.URLAPIReboot, anytool.Reboot)
 	http.HandleFunc(anytool.URLAPIConfig, anytool.UploadConfigFile)
