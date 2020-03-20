@@ -50,13 +50,13 @@ func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
 
 	file, _, err := r.FormFile("config")
 	if err != nil {
-		response(w, CodeSysInvalidArguments)
+		response(w, CodeInvalidArguments)
 		return
 	}
 	defer file.Close()
 	err = doConfigFile(file, md5Str)
 	if err != nil {
-		response(w, CodeSysOperationFailed)
+		response(w, CodeOperationFailed)
 	} else {
 		response(w, http.StatusOK)
 	}
@@ -101,7 +101,7 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 func Upgrade(w http.ResponseWriter, r *http.Request) {
 	md5Str := r.FormValue("md5")
 	if md5Str == "" {
-		response(w, CodeSysInvalidArguments)
+		response(w, CodeInvalidArguments)
 		return
 	}
 
@@ -112,7 +112,7 @@ func Upgrade(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	if err := doUpdate(file, md5Str); err != nil {
-		response(w, CodeSysOperationFailed)
+		response(w, CodeOperationFailed)
 		return
 	}
 	response(w, http.StatusOK)
