@@ -1,60 +1,41 @@
 
 # 固件版本
 version = v0.1.2
+
 # 设置固件名称
 firmwareName = anytool
 
+platform = CGO_ENABLED=0
 ifeq (${MAKECMDGOALS},arm5)
-	firmware := ${firmwareName}-linux-arm5-${version}
+	platform += GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc
+	execveFile := ${firmwareName}-linux-arm5-${version}
 else ifeq (${MAKECMDGOALS},mipsle)
-	firmware := ${firmwareName}-linux-mipsle-${version}
+	platform += GOOS=linux GOARCH=mipsle GOARM=5 \
+      STAGING_DIR=/opt/toolchain/openwrt18.06/staging_dir \
+      CC=/opt/toolchain/openwrt18.06/staging_dir/gcc-mipsel-linux-7.3.0/bin/mipsel-openwrt-linux-gcc
+	execveFile := ${firmwareName}-linux-mipsle-${version}
 else ifeq (${MAKECMDGOALS},windows)
-	firmware := ${firmwareName}-windows-amd64-${version}
+	platform += GOOS=windows GOARCH=amd64
+	execveFile := ${firmwareName}-windows-amd64-${version}
 else # default system
-	firmware := ${firmwareName}-system-${version}
+	execveFile := ${firmwareName}-system-${version}
 endif
 
 # 路径相关
 BINDIR=${CURDIR}/bin
 
-system:
-	@echo "----> system executable building..."
-	@mkdir -p ${BINDIR}
-	@CGO_ENABLED=0 go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
-	@upx -9 ${BINDIR}/${firmware}
-	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
-	@echo "----> system executable build successful"
+system: target
+arm5: target
+mipsle: target
+windows: target
 
-arm5:
-	@echo "----> linux arm5 executable building..."
+target:
+	@echo "----> executable building..."
 	@mkdir -p ${BINDIR}
-	@CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc \
-	go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
-	@upx -9 ${BINDIR}/${firmware}
-	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
-	@echo "----> linux arm5 executable build successful"
-
-mipsle:
-	@echo "----> linux mipsle executable building..."
-	@mkdir -p ${BINDIR}
-	@CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOARM=5 \
-	STAGING_DIR=/opt/toolchain/openwrt18.06/staging_dir \
-	CC=/opt/toolchain/openwrt18.06/staging_dir/gcc-mipsel-linux-7.3.0/bin/mipsel-openwrt-linux-gcc \
-	go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
-	@upx -9 ${BINDIR}/${firmware}
-	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
-	@echo "----> linux mipsle executable build successful"
-
-windows:
-	@echo "----> windows amd64 executable building..."
-	@mkdir -p ${BINDIR}
-	@CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o ${BINDIR}/${firmware} .
-	@upx -9 ${BINDIR}/${firmware}
-	@bzip2 -c ${BINDIR}/${firmware} > ${BINDIR}/${firmware}.bz2
-	@echo "----> windows amd64 executable build successful"
-
-install:
-	@go install
+	@${platform} go build -ldflags "-s -w" -o ${BINDIR}/${execveFile} .
+	@upx -9 ${BINDIR}/${execveFile}
+	@bzip2 -c ${BINDIR}/${execveFile} > ${BINDIR}/${execveFile}.bz2
+	@echo "----> executable build successful"
 
 help:
 	@echo " ------------- How to build ------------- "
