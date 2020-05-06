@@ -1,7 +1,6 @@
 // package anytool provider simple tool for gateway and other way
 // config file fix anytool.yaml
 // exec binary file same as
-// memlog useful for debug,default adapter memory
 
 package anytool
 

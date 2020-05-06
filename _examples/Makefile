@@ -33,7 +33,7 @@ target:
 	@echo "----> executable building..."
 	@mkdir -p ${BINDIR}
 	@${platform} go build -ldflags "-s -w" -o ${BINDIR}/${execveFile} .
-	@upx -9 ${BINDIR}/${execveFile}
+	@upx --best --lzma ${BINDIR}/${execveFile}
 	@bzip2 -c ${BINDIR}/${execveFile} > ${BINDIR}/${execveFile}.bz2
 	@echo "----> executable build successful"
 
