@@ -25,9 +25,12 @@ endif
 BINDIR=${CURDIR}/bin
 
 system: target
-arm5: target
+arm5: target      - openbsd
 mipsle: target
 windows: target
+
+goreleaser:
+	@goreleaser --snapshot --skip-publish --rm-dist
 
 target:
 	@echo "----> executable building..."
