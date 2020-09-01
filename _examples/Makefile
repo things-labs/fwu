@@ -6,6 +6,9 @@ version = v0.2.3
 firmwareName = anytool
 
 platform = CGO_ENABLED=0
+# 编译tags,多个采用','分开
+opts = -trimpath
+flags = -ldflags "-s -w"
 ifeq (${MAKECMDGOALS},arm5)
 	platform += GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc
 	execveFile := ${firmwareName}-linux-arm5-${version}
@@ -25,7 +28,7 @@ endif
 BINDIR=${CURDIR}/bin
 
 system: target
-arm5: target      - openbsd
+arm5: target
 mipsle: target
 windows: target
 
@@ -35,7 +38,7 @@ goreleaser:
 target:
 	@echo "----> executable building..."
 	@mkdir -p ${BINDIR}
-	@${platform} go build -ldflags "-s -w" -o ${BINDIR}/${execveFile} .
+	@${platform} go build ${opts} ${flags} -o ${BINDIR}/${execveFile} .
 	@upx --best --lzma ${BINDIR}/${execveFile}
 	@bzip2 -c ${BINDIR}/${execveFile} > ${BINDIR}/${execveFile}.bz2
 	@echo "----> executable build successful"

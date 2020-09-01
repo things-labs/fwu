@@ -12,7 +12,7 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-func response(w http.ResponseWriter, code Code, data ...interface{}) {
+func response(w http.ResponseWriter, code int, data ...interface{}) {
 	var value interface{}
 
 	if len(data) > 0 {
@@ -21,19 +21,11 @@ func response(w http.ResponseWriter, code Code, data ...interface{}) {
 		value = "{}"
 	}
 
-	if code < 1000 {
-		JSON(w, int(code), Response{
-			Code:    int(code),
-			Message: http.StatusText(int(code)),
-			Data:    value,
-		})
-	} else {
-		JSON(w, int(code), Response{
-			Code:    int(code),
-			Message: code.String(),
-			Data:    value,
-		})
-	}
+	JSON(w, code, &Response{
+		Code:    code,
+		Message: http.StatusText(int(code)),
+		Data:    value,
+	})
 }
 
 // JSON json传输
