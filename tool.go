@@ -10,15 +10,16 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"html/template"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"text/template"
 
 	_ "embed"
+
+	"github.com/thinkgos/render"
 )
 
 // API URL
@@ -37,9 +38,7 @@ var toolTpl = template.Must(template.New("tool").Parse(indexHTML))
 
 // ToolHTML get tool html page
 func ToolHTML(w http.ResponseWriter, _ *http.Request) {
-	if err := toolTpl.Execute(w, nil); err != nil {
-		log.Println("temple execute failed", err)
-	}
+	render.HTML(w, http.StatusOK, "", toolTpl, nil)
 }
 
 // Reboot 重启命令
@@ -64,9 +63,9 @@ func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
 	err = doConfigFile(file, md5Str)
 	if err != nil {
 		response(w, http.StatusExpectationFailed)
-	} else {
-		response(w, http.StatusOK)
+		return
 	}
+	response(w, http.StatusOK)
 }
 
 func doConfigFile(file io.ReadSeeker, md string) error {

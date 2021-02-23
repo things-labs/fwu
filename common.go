@@ -1,8 +1,9 @@
 package anytool
 
 import (
-	"encoding/json"
 	"net/http"
+
+	"github.com/thinkgos/render"
 )
 
 // Response 回复基本格式
@@ -21,24 +22,9 @@ func response(w http.ResponseWriter, code int, data ...interface{}) {
 		value = "{}"
 	}
 
-	JSON(w, code, &Response{
+	render.JSON(w, code, Response{
 		Code:    code,
 		Message: http.StatusText(code),
 		Data:    value,
 	})
-}
-
-// JSON json传输
-func JSON(w http.ResponseWriter, statusCode int, payload interface{}) {
-	content, err := json.Marshal(payload)
-	if err != nil {
-		panic(err)
-	}
-
-	w.WriteHeader(statusCode)
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	_, err = w.Write(content)
-	if err != nil {
-		panic(err)
-	}
 }

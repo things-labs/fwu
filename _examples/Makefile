@@ -7,7 +7,7 @@ firmwareName = anytool
 
 platform = CGO_ENABLED=0
 # 编译tags,多个采用','分开
-opts = -trimpath
+opts = -trimpath -tags=noprotopack,noyamlpack,nomsgpack
 flags = -ldflags "-s -w"
 ifeq (${MAKECMDGOALS},arm5)
 	platform += GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc
