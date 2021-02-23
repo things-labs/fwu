@@ -10,7 +10,8 @@ builds:
   - env:
       - CGO_ENABLED=0
     flags:
-      - -trimpath -tags=noprotopack,noyamlpack,nomsgpack
+      - -trimpath
+      - -tags=noprotopack,noyamlpack,nomsgpack
     ldflags:
       - -s -w
     goos:
