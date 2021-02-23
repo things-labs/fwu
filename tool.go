@@ -16,6 +16,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"text/template"
+
+	_ "embed"
 )
 
 // API URL
@@ -26,6 +29,11 @@ const (
 )
 
 var errRollback = errors.New("roll back error")
+
+//go:embed index.html
+var indexHTML string
+
+var toolTpl = template.Must(template.New("tool").Parse(indexHTML))
 
 // ToolHTML get tool html page
 func ToolHTML(w http.ResponseWriter, _ *http.Request) {

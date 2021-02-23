@@ -1,6 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 
-/.idea/
+.idea
 anytool*
 dist
-bin
+_examples/bin

@@ -23,7 +23,7 @@ func response(w http.ResponseWriter, code int, data ...interface{}) {
 
 	JSON(w, code, &Response{
 		Code:    code,
-		Message: http.StatusText(int(code)),
+		Message: http.StatusText(code),
 		Data:    value,
 	})
 }
