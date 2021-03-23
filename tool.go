@@ -91,7 +91,7 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 	}
 
 	// 配置文件路径
-	filePath := filepath.Join(filepath.Dir(execPath), "anytool.yaml")
+	filePath := filepath.Join(filepath.Dir(execPath), "config.yaml")
 	fp, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		return err
