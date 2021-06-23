@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/thinkgos/anytool"
+	anytool "github.com/things-labs/fwu"
 )
 
 func main() {

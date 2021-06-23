@@ -7,6 +7,7 @@ package anytool
 import (
 	"compress/bzip2"
 	"crypto/md5"
+	_ "embed"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -17,9 +18,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	_ "embed"
-
-	"github.com/thinkgos/render"
+	"github.com/things-go/render"
 )
 
 // API URL

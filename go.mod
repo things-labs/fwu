@@ -1,5 +1,5 @@
-module github.com/thinkgos/anytool
+module github.com/things-labs/fwu
 
 go 1.16
 
-require github.com/thinkgos/render v0.1.7
+require github.com/things-go/render v0.0.1
