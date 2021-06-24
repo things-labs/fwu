@@ -2,7 +2,7 @@
 // config file fix anytool.yaml
 // exec binary file same as
 
-package anytool
+package fwu
 
 import (
 	"compress/bzip2"
