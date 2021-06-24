@@ -1,5 +1,5 @@
 # 固件版本
-version = v0.0.1
+version = v0.0.2
 
 # 设置固件名称
 firmwareName = fwu
@@ -7,8 +7,11 @@ firmwareName = fwu
 # 编译平台
 platform = CGO_ENABLED=0
 ifeq (${MAKECMDGOALS},arm5)
-	platform += GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc
+	platform += GOOS=linux GOARCH=arm GOARM=5
 	execveFile := ${firmwareName}-linux-arm5-${version}
+else ifeq (${MAKECMDGOALS},arm7)
+	platform += GOOS=linux GOARCH=arm GOARM=7
+	execveFile := ${firmwareName}-linux-arm7-${version}
 else ifeq (${MAKECMDGOALS},mipsle)
 	platform += GOOS=linux GOARCH=mipsle GOARM=5 \
       STAGING_DIR=/opt/toolchain/openwrt18.06/staging_dir \
@@ -18,7 +21,7 @@ else ifeq (${MAKECMDGOALS},windows)
 	platform += GOOS=windows GOARCH=amd64
 	execveFile := ${firmwareName}-windows-amd64-${version}
 else # default system
-	execveFile := ${firmwareName}
+	execveFile := ${firmwareName}-${version}
 endif
 
 # 编译tags,多个采用','分开
@@ -26,8 +29,8 @@ opts = -trimpath -tags=noprotopack,noyamlpack,nomsgpack
 # 编译flags
 path = main
 flags = -ldflags "-X '${path}.BuildTime=`date "+%F %T %z"`' \
- 				-X '${path}.Version=${version}' \
- 				-s -w"
+ 				  -X '${path}.Version=${version}' \
+ 				  -s -w"
 
 target:
 	@echo "----> executable building..."
@@ -38,6 +41,7 @@ target:
 
 system: target
 arm5: target
+arm7: target
 mipsle: target
 windows: target
 
