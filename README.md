@@ -1,5 +1,5 @@
-# tool
-- http端口： 建议9527
+# fwu
+- http端口： :80
 - 工具地址： / 
 > a. 重启  
 > b. 上传配置,只支持yaml,yml文件,固定名字config.yaml  

@@ -24,17 +24,16 @@ endif
 # 编译tags,多个采用','分开
 opts = -trimpath -tags=noprotopack,noyamlpack,nomsgpack
 # 编译flags
-path = github.com/things-labs/fwu/fwu
+path = main
 flags = -ldflags "-X '${path}.BuildTime=`date "+%F %T %z"`' \
  				-X '${path}.Version=${version}' \
  				-s -w"
 
-
 target:
 	@echo "----> executable building..."
-	@${platform} go build ${opts} ${flags} -o ${execveFile} .
-#	@upx --best --lzma ${execveFile}
-#	@bzip2 -c ${execveFile} > ${execveFile}.bz2
+	${platform} go build ${opts} ${flags} -o ${execveFile} .
+	@upx --best --lzma ${execveFile}
+	@bzip2 -c ${execveFile} > ${execveFile}.bz2
 	@echo "----> executable build successful"
 
 system: target
