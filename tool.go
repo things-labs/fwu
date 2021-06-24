@@ -49,22 +49,22 @@ func Reboot(_ http.ResponseWriter, _ *http.Request) {
 func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
 	md5Str := r.FormValue("md5")
 	if md5Str == "" {
-		response(w, http.StatusBadRequest)
+		AbortErrBadRequest(w, NewCustomError("md5值是必填项"))
 		return
 	}
 
 	file, _, err := r.FormFile("config")
 	if err != nil {
-		response(w, http.StatusBadRequest)
+		AbortErrBadRequest(w, NewCustomError("配置文件名必须为config"))
 		return
 	}
 	defer file.Close()
 	err = doConfigFile(file, md5Str)
 	if err != nil {
-		response(w, http.StatusExpectationFailed)
+		AbortError(w, NewCustomError("上传失败"))
 		return
 	}
-	response(w, http.StatusOK)
+	ResponseOK(w)
 }
 
 func doConfigFile(file io.ReadSeeker, md string) error {
@@ -106,21 +106,21 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 func Upgrade(w http.ResponseWriter, r *http.Request) {
 	md5Str := r.FormValue("md5")
 	if md5Str == "" {
-		response(w, http.StatusBadRequest)
+		AbortErrBadRequest(w, NewCustomError("md5值是必填项"))
 		return
 	}
 
 	file, _, err := r.FormFile("firmware")
 	if err != nil {
-		response(w, http.StatusInternalServerError)
+		AbortErrBadRequest(w, NewCustomError("配置文件名必须为firmware"))
 		return
 	}
 	defer file.Close()
-	if err := doUpdate(file, md5Str); err != nil {
-		response(w, http.StatusExpectationFailed)
+	if err = doUpdate(file, md5Str); err != nil {
+		AbortError(w, NewCustomError("上传失败"))
 		return
 	}
-	response(w, http.StatusOK)
+	ResponseOK(w)
 }
 
 func doUpdate(file io.ReadSeeker, md string) error {

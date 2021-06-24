@@ -3,7 +3,7 @@
 version = v0.2.3
 
 # 设置固件名称
-firmwareName = anytool
+firmwareName = fwu
 
 platform = CGO_ENABLED=0
 # 编译tags,多个采用','分开
@@ -21,11 +21,10 @@ else ifeq (${MAKECMDGOALS},windows)
 	platform += GOOS=windows GOARCH=amd64
 	execveFile := ${firmwareName}-windows-amd64-${version}
 else # default system
-	execveFile := ${firmwareName}-system-${version}
+	execveFile := ${firmwareName}
 endif
 
 # 路径相关
-BINDIR=${CURDIR}/bin
 
 system: target
 arm5: target
@@ -37,10 +36,9 @@ goreleaser:
 
 target:
 	@echo "----> executable building..."
-	@mkdir -p ${BINDIR}
-	@${platform} go build ${opts} ${flags} -o ${BINDIR}/${execveFile} .
-	@upx --best --lzma ${BINDIR}/${execveFile}
-	@bzip2 -c ${BINDIR}/${execveFile} > ${BINDIR}/${execveFile}.bz2
+	@${platform} go build ${opts} ${flags} -o ${execveFile} .
+	@upx --best --lzma ${execveFile}
+	@bzip2 -c ${execveFile} > ${execveFile}.bz2
 	@echo "----> executable build successful"
 
 help:
@@ -57,7 +55,6 @@ help:
 clean:
 	@echo "----> cleanning"
 	@go clean
-	@rm -rf ${BINDIR}/*
 	@echo "----> clean successful"
 
 .PHONY: system arm5 mipsle install clean
