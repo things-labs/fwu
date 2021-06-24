@@ -1,5 +1,5 @@
-// package anytool provider simple tool for gateway and other way
-// config file fix anytool.yaml
+// package fwu provider simple tool for gateway and other way
+// config file fix config.yaml
 // exec binary file same as
 
 package fwu
@@ -21,31 +21,29 @@ import (
 	"github.com/things-go/render"
 )
 
-// API URL
-const (
-	URLAPIReboot  = "/api/anytool/reboot"
-	URLAPIConfig  = "/api/anytool/config"
-	URLAPIUpgrade = "/api/anytool/upgrade"
-)
-
 var errRollback = errors.New("roll back error")
 
 //go:embed index.html
 var indexHTML string
 
-var toolTpl = template.Must(template.New("tool").Parse(indexHTML))
+var indexTpl = template.Must(template.New("tool").Parse(indexHTML))
 
-// ToolHTML get tool html page
-func ToolHTML(w http.ResponseWriter, _ *http.Request) {
-	render.HTML(w, http.StatusOK, "", toolTpl, nil)
+// IndexHTML get tool html page
+func IndexHTML(w http.ResponseWriter, _ *http.Request) {
+	render.HTML(w, http.StatusOK, "", indexTpl, nil)
 }
 
 // Reboot 重启命令
-func Reboot(_ http.ResponseWriter, _ *http.Request) {
-	_ = exec.Command("reboot").Run()
+func Reboot(w http.ResponseWriter, _ *http.Request) {
+	err := exec.Command("reboot").Run()
+	if err != nil {
+		AbortError(w, NewCustomError("重启失败"))
+	}
 }
 
 // UploadConfigFile 配置命令 method post
+// FormValue 携带md5值
+// FormFile 名称为config
 func UploadConfigFile(w http.ResponseWriter, r *http.Request) {
 	md5Str := r.FormValue("md5")
 	if md5Str == "" {
@@ -103,6 +101,8 @@ func doConfigFile(file io.ReadSeeker, md string) error {
 }
 
 // Upgrade upgrade firmware ( method post )
+// FormValue 携带md5值
+// FormFile 名称为firmware
 func Upgrade(w http.ResponseWriter, r *http.Request) {
 	md5Str := r.FormValue("md5")
 	if md5Str == "" {

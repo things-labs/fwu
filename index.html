@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>tool</title>
+    <title>firmware upgrade</title>
     <style type="text/css">
         .borderLine {
             border: 2px solid #666;
@@ -820,10 +820,10 @@
         var form = new FormData()
         form.append('md5', md5)
         if (fileExt[0] === 'bz2') {
-            urlname = '/api/anytool/upgrade'
+            urlname = '/api/fwu/upgrade'
             form.append('firmware', file)
         } else if (fileExt[0] === 'yaml' || fileExt[0] === 'yml') {
-            urlname = '/api/anytool/config'
+            urlname = '/api/fwu/config'
             form.append('config', file)
         } else {
             alert('文件有误')
@@ -919,7 +919,7 @@
         }
         //3.绑定处理请求的地址,true为异步，false为同步
         //GET方式提交把参数加在地址后面?key1:value&key2:value
-        xmlHttp.open('post', '/api/anytool/reboot', true)
+        xmlHttp.open('post', '/api/fwu/reboot', true)
         //4.POST提交设置的协议头（GET方式省略）
         xmlHttp.setRequestHeader('Content-type', 'multipart/form-data')
         //POST提交将参数，如果是GET提交send不用提交参数

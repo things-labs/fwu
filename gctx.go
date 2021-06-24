@@ -12,9 +12,9 @@ const CustomCode = 999999
 const CustomStatus = 499
 
 type Error struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Detail  string `json:"detail"`
+	Code    int
+	Message string
+	Detail  string
 }
 
 func (e *Error) Error() string {

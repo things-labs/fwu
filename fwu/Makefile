@@ -1,14 +1,11 @@
-
 # 固件版本
-version = v0.2.3
+version = v0.0.1
 
 # 设置固件名称
 firmwareName = fwu
 
+# 编译平台
 platform = CGO_ENABLED=0
-# 编译tags,多个采用','分开
-opts = -trimpath -tags=noprotopack,noyamlpack,nomsgpack
-flags = -ldflags "-s -w"
 ifeq (${MAKECMDGOALS},arm5)
 	platform += GOOS=linux GOARCH=arm GOARM=5 CC=arm-linux-gcc
 	execveFile := ${firmwareName}-linux-arm5-${version}
@@ -24,7 +21,21 @@ else # default system
 	execveFile := ${firmwareName}
 endif
 
-# 路径相关
+# 编译tags,多个采用','分开
+opts = -trimpath -tags=noprotopack,noyamlpack,nomsgpack
+# 编译flags
+path = github.com/things-labs/fwu/fwu
+flags = -ldflags "-X '${path}.BuildTime=`date "+%F %T %z"`' \
+ 				-X '${path}.Version=${version}' \
+ 				-s -w"
+
+
+target:
+	@echo "----> executable building..."
+	@${platform} go build ${opts} ${flags} -o ${execveFile} .
+#	@upx --best --lzma ${execveFile}
+#	@bzip2 -c ${execveFile} > ${execveFile}.bz2
+	@echo "----> executable build successful"
 
 system: target
 arm5: target
@@ -33,13 +44,6 @@ windows: target
 
 goreleaser:
 	@goreleaser --snapshot --skip-publish --rm-dist
-
-target:
-	@echo "----> executable building..."
-	@${platform} go build ${opts} ${flags} -o ${execveFile} .
-	@upx --best --lzma ${execveFile}
-	@bzip2 -c ${execveFile} > ${execveFile}.bz2
-	@echo "----> executable build successful"
 
 help:
 	@echo " ------------- How to build ------------- "

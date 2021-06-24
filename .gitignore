@@ -1,6 +1,10 @@
 # Created by .ignore support plugin (hsz.mobi)
 
+*.exe
+*.exe~
+fwu/fwu
+fwu/fwu.bz2
+
+# file
 .idea
-fwu*
 dist
-fwu/bin

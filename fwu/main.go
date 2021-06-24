@@ -1,21 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/things-labs/fwu"
 )
 
-func main() {
-	//html
-	http.HandleFunc("/", fwu.ToolHTML)
-	// api
-	http.HandleFunc(fwu.URLAPIReboot, fwu.Reboot)
-	http.HandleFunc(fwu.URLAPIConfig, fwu.UploadConfigFile)
-	http.HandleFunc(fwu.URLAPIUpgrade, fwu.Upgrade)
+var BuildTime = "unknown"
+var Version = "unknown"
 
-	if err := http.ListenAndServe(":9527", nil); err != nil {
+func main() {
+	fmt.Printf("Version: %s\r\n", Version)
+	fmt.Printf("BuildTime: %s\r\n", BuildTime)
+
+	// html
+	http.HandleFunc("/", fwu.IndexHTML)
+	// api
+	http.HandleFunc("/api/fwu/reboot", fwu.Reboot)
+	http.HandleFunc("/api/fwu/config", fwu.UploadConfigFile)
+	http.HandleFunc("/api/fwu/upgrade", fwu.Upgrade)
+
+	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Printf("http listen and serve failed, %v", err)
 	}
 }
